@@ -19,6 +19,7 @@ import br.com.jsa.agendaapi.config.JwtTokenUtil;
 import br.com.jsa.agendaapi.exception.DadoExistenteException;
 import br.com.jsa.agendaapi.exception.DadoInexistenteException;
 import br.com.jsa.agendaapi.model.Funcionario;
+import br.com.jsa.agendaapi.model.ObjetoLogin;
 import br.com.jsa.agendaapi.model.Pessoa;
 import br.com.jsa.agendaapi.model.Usuario;
 import br.com.jsa.agendaapi.repository.FuncionarioRepository;
@@ -42,7 +43,6 @@ public class UsuarioService implements UserDetailsService {
     
 	@Override
 	public UserDetails loadUserByUsername(String arg0) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -70,11 +70,13 @@ public class UsuarioService implements UserDetailsService {
 		mensageriaService.enviarEmailNovoUsuario(usuario.getEmail(), usuario.getPessoa().getNome(), usuario.getChaveAtivacao());
 	}
     
-    public UserDetails login(Usuario usuario) {
-        Usuario findByUsuario = usuarioRepository.findByUsuario(usuario.getUsuario()).get();
+    public UserDetails login(ObjetoLogin objetoLogin) throws DadoExistenteException {
+    	Usuario u = new Usuario();
+    	Usuario findByUsuario = verificarUsuarioOuEmail(objetoLogin, u);
+    	
         if(findByUsuario != null) {
-            if(usuario.getUsuario().equals(findByUsuario.getUsuario()) && BCrypt.checkpw(usuario.getSenha(), findByUsuario.getSenha())) {
-                return new User(findByUsuario.getUsuario(), usuario.getSenha(), new ArrayList<>());
+            if(BCrypt.checkpw(u.getSenha(), findByUsuario.getSenha())) {
+                return new User(findByUsuario.getUsuario(), u.getSenha(), new ArrayList<>());
             } else {
                 throw new RuntimeException("Senha inválida.");
             }
@@ -126,6 +128,20 @@ public class UsuarioService implements UserDetailsService {
 		Usuario user = usuarioRepository.save(usuario);
 		user.setSenha("");
 		return user;
+	}
+	
+	
+	public Usuario verificarUsuarioOuEmail(ObjetoLogin objetoLogin, Usuario u) throws DadoExistenteException {
+		u.setSenha(objetoLogin.getSenha());
+		if(objetoLogin.getEmailUsuario().contains("@")) { 
+    		u.setEmail(objetoLogin.getEmailUsuario());
+    		return usuarioRepository.findByEmail(objetoLogin.getEmailUsuario()).get();
+    	} else if(!objetoLogin.getEmailUsuario().contains("@")) {
+    		u.setUsuario(objetoLogin.getEmailUsuario());
+    		return usuarioRepository.findByUsuario(objetoLogin.getEmailUsuario()).get();
+    	}else {
+    		throw new DadoExistenteException("Dados informados");
+    	}
 	}
 	
 }

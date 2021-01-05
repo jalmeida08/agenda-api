@@ -6,7 +6,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.jsa.agendaapi.config.JwtTokenUtil;
 import br.com.jsa.agendaapi.exception.DadoExistenteException;
 import br.com.jsa.agendaapi.exception.DadoInexistenteException;
+import br.com.jsa.agendaapi.model.ObjetoLogin;
 import br.com.jsa.agendaapi.model.Usuario;
 import br.com.jsa.agendaapi.service.UsuarioService;
 
@@ -35,18 +35,18 @@ public class AreaPublicaResource {
     private JwtTokenUtil jwtTokenUtil;
 	
 	@PostMapping("/login")
-    public ResponseEntity<?> login (@RequestBody Usuario usuario) {
+    public ResponseEntity<?> login (@RequestBody ObjetoLogin objetoLogin) {
         try {
-            Usuario user = new Usuario();
+            Usuario u = new Usuario();
 
-            final UserDetails userDetails = usuarioService.login(usuario);
-            user = usuarioService.buscarDadosUsuario(usuario.getUsuario());
-            user.setSenha("");
-            user.setToken(jwtTokenUtil.generateToken(userDetails));
+            final UserDetails userDetails = usuarioService.login(objetoLogin);
+            u = usuarioService.verificarUsuarioOuEmail(objetoLogin, u);
+            u.setSenha("");
+            u.setToken(jwtTokenUtil.generateToken(userDetails));
 
-            return ResponseEntity.ok(user);
-        }catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
+            return ResponseEntity.ok(u);
+        }catch (RuntimeException | DadoExistenteException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 	

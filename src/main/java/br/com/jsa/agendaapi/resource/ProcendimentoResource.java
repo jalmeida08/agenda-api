@@ -7,6 +7,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,12 @@ public class ProcendimentoResource {
 	public ResponseEntity<?> salvar(@RequestBody Procedimento procedimento){
 		procedimentoService.salvarProcedimento(procedimento);
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("lista-procedimento")
+	public ResponseEntity<Iterable<Procedimento>> listaProcedimento() {
+		Iterable<Procedimento> listarProcedimento = procedimentoService.listarProcedimento();
+		return ResponseEntity.ok().body(listarProcedimento);
 	}
 
 }

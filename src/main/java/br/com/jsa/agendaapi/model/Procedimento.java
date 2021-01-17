@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,6 +26,8 @@ public class Procedimento implements Serializable{
 	private Integer id;
 	private String nome;
 	private double valor;
+	@Column(name="tempo_duracao_procedimento")
+	private float tempoDuracaoProcedimento;
 	@ManyToMany(mappedBy="procedimento")
 	private List<Atendimento> atendimento = new ArrayList<Atendimento>();
 	@Version
@@ -47,6 +50,12 @@ public class Procedimento implements Serializable{
 	}
 	public void setValor(double valor) {
 		this.valor = valor;
+	}
+	public float getTempoDuracaoProcedimento() {
+		return tempoDuracaoProcedimento;
+	}
+	public void setTempoDuracaoProcedimento(float tempoDuracaoProcedimento) {
+		this.tempoDuracaoProcedimento = tempoDuracaoProcedimento;
 	}
 	public List<Atendimento> getAtendimento() {
 		return atendimento;

@@ -1,5 +1,7 @@
 package br.com.jsa.agendaapi.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,10 @@ public class AtendimentoService {
 	
 	public void salvar(Atendimento atendimento) {
 		atendimentoRepository.save(atendimento);
+	}
+	
+	public Iterable<Atendimento> listaAtendimentoDia() {
+		return atendimentoRepository.listaAtendimentoDia(new Date());
 	}
 	
 }

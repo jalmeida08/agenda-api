@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.jsa.agendaapi.exception.DadoInvalidoException;
 import br.com.jsa.agendaapi.model.Cliente;
 import br.com.jsa.agendaapi.service.ClienteService;
 
@@ -29,5 +30,16 @@ public class ClienteResource {
 	public ResponseEntity<?> salvar(@RequestBody Cliente cliente){
 		clienteService.salvar(cliente);
 		return ResponseEntity.ok().build();
+	}
+	
+	@PostMapping("/buscar-cliente")
+	public ResponseEntity<?> buscarClientePorNomeOuDtNascimento(@RequestBody Cliente cliente){
+		try {
+			Iterable<Cliente> lstCliente = clienteService.
+					buscarClientePorNomeOuDataNascimento(cliente.getNome(), cliente.getDataNascimento());
+			return ResponseEntity.ok(lstCliente);
+		} catch (DadoInvalidoException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 }

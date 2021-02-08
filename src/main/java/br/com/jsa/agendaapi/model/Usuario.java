@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -22,19 +24,21 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity(name = "usuario")
 @JsonIdentityInfo(scope = Usuario.class, generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Usuario implements Serializable {
 
-	private static final long serialVersionUID = 1L;
 	
-    @Id
+	private static final long serialVersionUID = 7404897341218414223L;
+	
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String usuario;
-	private String email;
 	private String senha;
 	@OneToOne
     @JoinColumn(name="pessoa_id")
 	private Pessoa pessoa;
+	private String email;
 	@ManyToMany
 	@JoinTable(name="acesso_usuario")
 	@JoinColumn(name="acesso_id")
@@ -49,7 +53,7 @@ public class Usuario implements Serializable {
     @Version
     private Integer versao;
     
-    public Integer getId() {
+	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
@@ -60,12 +64,6 @@ public class Usuario implements Serializable {
 	}
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
 	}
 	public String getSenha() {
 		return senha;
@@ -78,6 +76,12 @@ public class Usuario implements Serializable {
 	}
 	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	public List<Acesso> getAcesso() {
 		return acesso;

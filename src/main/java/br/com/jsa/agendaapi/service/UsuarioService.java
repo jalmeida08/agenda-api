@@ -58,6 +58,7 @@ public class UsuarioService implements UserDetailsService {
 		f.setNome(p.getNome());
 		f.setUsuario(p.getUsuario());
 		
+		
 		usuario.setPessoa(funcionarioRepository.save(f));
 		usuarioRepository.save(usuario);
 		gerarChaveAtivacaoUsuario(usuario);
@@ -134,7 +135,7 @@ public class UsuarioService implements UserDetailsService {
 	public Usuario verificarUsuarioOuEmail(ObjetoLogin objetoLogin, Usuario u) throws DadoExistenteException {
 		u.setSenha(objetoLogin.getSenha());
 		if(objetoLogin.getEmailUsuario().contains("@")) { 
-    		u.setEmail(objetoLogin.getEmailUsuario());
+    		u.setEmail((objetoLogin.getEmailUsuario()));
     		return usuarioRepository.findByEmail(objetoLogin.getEmailUsuario()).get();
     	} else if(!objetoLogin.getEmailUsuario().contains("@")) {
     		u.setUsuario(objetoLogin.getEmailUsuario());

@@ -16,8 +16,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity(name = "pessoa")
-//@JsonIdentityInfo(scope = Pessoa.class, generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(scope = Pessoa.class, generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="dtype", length=10, discriminatorType=DiscriminatorType.STRING)
 @DiscriminatorValue("pessoa")
@@ -33,6 +36,8 @@ public class Pessoa implements Serializable{
 	@OneToOne(mappedBy="pessoa")
     @JoinColumn(name="usuario_id")
 	private Usuario usuario;
+	@OneToOne(mappedBy="pessoa")
+	private Contato contato;
 	@Column(insertable=false, updatable=false)
 	private String dtype;
 	@Version
@@ -68,4 +73,11 @@ public class Pessoa implements Serializable{
 	public void setVersao(Integer versao) {
 		this.versao = versao;
 	}
+	public Contato getContato() {
+		return contato;
+	}
+	public void setContato(Contato contato) {
+		this.contato = contato;
+	}
+	
 }

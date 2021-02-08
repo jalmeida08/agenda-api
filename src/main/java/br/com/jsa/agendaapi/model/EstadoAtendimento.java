@@ -21,17 +21,17 @@ public class EstadoAtendimento implements Serializable {
 	private static final long serialVersionUID = -8002779279442346438L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	private String nome;
 	@OneToMany(mappedBy="estadoAtendimento")
 	private List<Atendimento>listaAtendimento = new ArrayList<Atendimento>();
 	@Version
 	private Integer versao;
 	
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getNome() {

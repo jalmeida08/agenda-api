@@ -1,22 +1,27 @@
 package br.com.jsa.agendaapi.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity(name = "pessoa")
@@ -37,7 +42,11 @@ public class Pessoa implements Serializable{
     @JoinColumn(name="usuario_id")
 	private Usuario usuario;
 	@OneToOne(mappedBy="pessoa")
+	@JsonIgnore
 	private Contato contato;
+	@ManyToMany(fetch=FetchType.EAGER, mappedBy="pessoa")
+	@JsonIgnore
+	private List<Atendimento> atendimento = new ArrayList<Atendimento>();
 	@Column(insertable=false, updatable=false)
 	private String dtype;
 	@Version
@@ -79,5 +88,10 @@ public class Pessoa implements Serializable{
 	public void setContato(Contato contato) {
 		this.contato = contato;
 	}
-	
+	public List<Atendimento> getAtendimento() {
+		return atendimento;
+	}
+	public void setAtendimento(List<Atendimento> atendimento) {
+		this.atendimento = atendimento;
+	}
 }

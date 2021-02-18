@@ -1,24 +1,28 @@
 package br.com.jsa.agendaapi.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity(name="atendimento")
-@JsonIdentityInfo(scope = Atendimento.class, generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Atendimento implements Serializable{
 	
 	private static final long serialVersionUID = 754262637058062883L;
@@ -30,12 +34,19 @@ public class Atendimento implements Serializable{
 	private double valorTotal;
 	private float desconto;
 	@Column(name="data_atendimento")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataAtendimento;
 	@Column(name="data_agendamento")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataAgendamento;
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinColumn(name="procedimento_id")
-	private List<Procedimento> procedimento;
+//	@JsonIgnore
+	private List<Procedimento> procedimento = new ArrayList<Procedimento>();
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="pessoa_id")
+//	@JsonIgnore
+	private List<Pessoa> pessoa = new ArrayList<Pessoa>();
 	@ManyToOne
 	private EstadoAtendimento estadoAtendimento;
 	@Version
@@ -89,5 +100,10 @@ public class Atendimento implements Serializable{
 	public void setVersao(Integer versao) {
 		this.versao = versao;
 	}
-	
+	public List<Pessoa> getPessoa() {
+		return pessoa;
+	}
+	public void setPessoa(List<Pessoa> pessoa) {
+		this.pessoa = pessoa;
+	}
 }

@@ -1,6 +1,7 @@
 package br.com.jsa.agendaapi.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,14 @@ public class AtendimentoService {
 	public void salvar(Atendimento atendimento) {
 		atendimento.setEstadoAtendimento(estadoAtendimentoRepository.findById(1L).get());
 		atendimentoRepository.save(atendimento);
+		
 	}
 	
-	public Iterable<Atendimento> listaAtendimentoDia() {
-		return atendimentoRepository.listaAtendimentoDia(new Date());
+	public List<Atendimento> listaAtendimentoDia() {
+		return atendimentoRepository.listaAtendimentoDiaSelecionado(new Date());
 	}
 	
+	public List<Atendimento> listaAtendimentoDiaSelecionado(Date dataAgendamento) {
+		return atendimentoRepository.listaAtendimentoDiaSelecionado(dataAgendamento);
+	}
 }

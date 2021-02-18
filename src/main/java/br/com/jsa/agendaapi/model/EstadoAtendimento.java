@@ -12,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity(name="estado_atendimento")
@@ -24,6 +25,7 @@ public class EstadoAtendimento implements Serializable {
 	private Long id;
 	private String nome;
 	@OneToMany(mappedBy="estadoAtendimento")
+	@JsonIgnore
 	private List<Atendimento>listaAtendimento = new ArrayList<Atendimento>();
 	@Version
 	private Integer versao;

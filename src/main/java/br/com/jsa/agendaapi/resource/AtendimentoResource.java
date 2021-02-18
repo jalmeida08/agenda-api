@@ -1,5 +1,8 @@
 package br.com.jsa.agendaapi.resource;
 
+import java.util.Date;
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -38,5 +41,11 @@ public class AtendimentoResource {
 		return ResponseEntity.ok(lstAtendimentoDIa);
 	}
 	
+	@PostMapping("/atendimentos-dia-selecionado")
+	public ResponseEntity<?> listaAtendimentoDiaSelecionado(@RequestBody Date dataAgendamento){
+		List<Atendimento> lstAtendimentoDiaSelecionado =
+				atendimentoService.listaAtendimentoDiaSelecionado(dataAgendamento);
+		return ResponseEntity.ok(lstAtendimentoDiaSelecionado);
+	}
 	
 }

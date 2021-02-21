@@ -53,9 +53,9 @@ public class ClienteService {
 		if(nome.length() == 0 && dataNascimento == null)
 			throw new DadoInvalidoException("É obrigatório o preenchimento de pelo menos um campo");
 		if(nome.length() > 0)
-			listaClientes = clienteRepository.findByNomeContains(nome);
+			listaClientes = clienteRepository.findByNomeContainsOrderByNomeAsc(nome);
 		else if(dataNascimento != null)
-			listaClientes = clienteRepository.findByDataNascimento(dataNascimento);
+			listaClientes = clienteRepository.findByDataNascimentoOrderByNomeAsc(dataNascimento);
 		
 		return listaClientes;	
 	}

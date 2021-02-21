@@ -42,7 +42,6 @@ public class Pessoa implements Serializable{
     @JoinColumn(name="usuario_id")
 	private Usuario usuario;
 	@OneToOne(mappedBy="pessoa")
-	@JsonIgnore
 	private Contato contato;
 	@ManyToMany(fetch=FetchType.EAGER, mappedBy="pessoa")
 	@JsonIgnore
